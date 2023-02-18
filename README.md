@@ -36,10 +36,10 @@ npm install avif.js
 ```
 
 ```js
-// Put this to reg.js and serve avif-sw.js from web root
+// Put this to reg.js and serve service-worker.js from web root
 // Both scripts should be transpilled (either manually with e.g. browserify or
 // automatically by parcel)
-require("avif.js").register("/avif-sw.js");
+require("avif.js").register("/service-worker.js");
 ```
 
 ```html
@@ -112,5 +112,5 @@ idea.
 
 ## License
 
-avif.js is licensed under [CC0](COPYING).  
+avif.js is licensed under [CC0](COPYING).
 Demo images are taken from [av1-avif](https://github.com/AOMediaCodec/av1-avif/tree/master/testFiles) repo.

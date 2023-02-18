@@ -1,5 +1,14 @@
-// Convert raw pixel data to BMP.
-// Based on canvas-to-bmp ((c) 2015 Ken "Epistemex" Fyrstenberg, MIT).
+
+/**
+ * Convert raw pixel data to BMP.
+ * It takes a Uint8ClampedArray (ab) containing the RGBA values of a canvas, and returns an ArrayBuffer
+ * (file) containing a BMP file
+ * Based on canvas-to-bmp ((c) 2015 Ken "Epistemex" Fyrstenberg, MIT).
+ * @param ab - the ArrayBuffer containing the image data
+ * @param w - width of the image
+ * @param h - height of the image
+ * @returns A file
+ */
 export function rgba2bmp(ab, w, h) {
   function setU16(v) {view.setUint16(pos, v, true); pos += 2;}
   function setU32(v) {view.setUint32(pos, v, true); pos += 4;}

@@ -22,7 +22,14 @@ function assert(cond, str) {
   if (!cond) throw new Error(str);
 }
 
-// Extract OBU.
+
+/**
+ * It parses the AVIF file
+ * header, extracts the image dimensions and the actual image data, and returns
+ * them as an object
+ * @param ab - The ArrayBuffer of the AVIF file.
+ * @returns An object with the width, height, and data of the image.
+ */
 export function avif2obu(ab) {
   function getU8() {const v = view.getUint8(pos); pos += 1; return v;}
   function getU16() {const v = view.getUint16(pos); pos += 2; return v;}
@@ -101,8 +108,14 @@ export function avif2obu(ab) {
   return {width, height, data};
 }
 
-// Embed OBU into MOV container stub as video frame.
-// TODO(Kagami): Fix matrix, bitdepth, av1C metadata.
+
+/**
+ * It takes a WebM file and converts it to a MOV file
+ * Embed OBU into MOV container stub as video frame.
+ * TODO(Kagami): Fix matrix, bitdepth, av1C metadata.
+ * @param  - `width` - the width of the video
+ * @returns An ArrayBuffer
+ */
 export function obu2mov({width, height, data}) {
   const fileSize = MOV_HEADER_SIZE + data.byteLength;
   const ab = new ArrayBuffer(fileSize);
@@ -123,7 +136,12 @@ export function obu2mov({width, height, data}) {
   return ab;
 }
 
-// Remux AVIF picture as MOV video with single frame.
+
+/**
+ * Remux AVIF picture as MOV video with single frame.
+ * @param ab - ArrayBuffer of the AVIF file
+ * @returns A function that takes an array buffer
+ */
 export function avif2mov(ab) {
   return obu2mov(avif2obu(ab));
 }

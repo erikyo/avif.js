@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>avif.js demo</title>
+  <script src="dist/avif-polyfill.js"></script>
+  <link rel="icon" href="favicon.png">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+  <!-- CSS Reset -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+
+  <!-- Milligram CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+  <style>
+    html, body {
+      min-height: 100%;
+      margin: 0 0 10px 0;
+      padding: 0;
+    }
+    body {
+      font-family: Helvetica, sans-serif;
+      text-align: center;
+      color: #333;
+    }
+    button {
+      font-size: 25px;
+      cursor: pointer;
+    }
+    button:disabled {
+      cursor: not-allowed;
+    }
+    img {
+      display: block;
+    }
+    .item {
+      display: inline-block;
+      border: 2px solid #aaa;
+    }
+    .hidden {
+      display: none;
+    }
+    .caption {
+      background-color: #ddd;
+      padding: 3px;
+    }
+    .user-img {
+      max-width: 100%;
+    }
+    .mexico-img {
+      width: 600px;
+    }
+    .irvine-img {
+      width: 480px;
+      height: 640px;
+    }
+    .ronda {
+      width: 540px;
+    }
+    .ronda-img {
+      height: 540px;
+      transform: rotate(90deg);
+      margin: 210px -210px;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    Test AVIF images
+    <button id="load-button" title="Load AVIF image">Load</button>
+  </h1>
+
+  <div class="item user hidden" id="custom-item"></div>
+  <input class="hidden" id="file-input" type="file" accept=".avif">
+
+  <div class="item mexico">
+    <div class="caption">&lt;img&gt;</div>
+    <img class="mexico-img" src="Mexico.avif">
+  </div>
+
+  <div class="item irvine">
+    <div class="caption">background-image: url()</div>
+    <div class="irvine-img" style="background-image: url(Irvine_CA.avif)"></div>
+  </div>
+
+  <div class="item ronda">
+    <div class="caption">transform: rotate(90deg)</div>
+    <img class="ronda-img" src="Ronda_rotate90.avif">
+  </div>
+</body>
+</html>
