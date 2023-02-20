@@ -2,7 +2,6 @@ const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyPlugin = require( 'copy-webpack-plugin' );
-const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -10,7 +9,14 @@ const webpackConfig = {
   mode: isProd ? 'production' : 'development',
   context: process.cwd(),
   entry: {
-    "avif-polyfill" : path.resolve(__dirname, 'src/index.ts'),
+    "avif-polyfill" : {
+      import: path.resolve(__dirname, 'src/index.ts'),
+      library: {
+        name: 'avifPolyfill',
+        type: 'umd'
+      },
+    },
+    "sw" : path.resolve(__dirname, 'src/sw.ts')
   },
   module: {
     rules: [
@@ -28,39 +34,35 @@ const webpackConfig = {
     ]
   },
   resolve: {
-    extensions: ['.ts', '.tsx', 'js'],
+    extensions: [ '.ts', '.tsx', '.js' ],
   },
   output: {
     path: path.resolve(__dirname, 'docs'),
     publicPath: '/',
     chunkFilename: '[name].js',
-    filename: ({runtime}) => {
+    globalObject: 'this',
+    filename: (runtime) => {
       // Check if the current filename is for the service worker:
-      if (runtime === 'avif-sw') {
+      if (runtime.chunk.runtime === 'sw') {
         // Output a service worker in the root of the dist directory
         // Also, ensure the output file name doesn't have a hash in it
         return '[name].js';
       }
 
       // Otherwise, output files as normal
-      return './dist/[name].js';
+      return 'dist/[name].js';
     },
-    clean: true,
-    umdNamedDefine: true,
-    globalObject: 'this',
-    library: {
-      name: 'avif-polyfill',
-      type: 'umd'
-    }
+    clean: true
   },
   devtool: 'source-map',
+  devServer: {
+    https: true,
+    static: {
+      directory: path.join(__dirname, 'docs'),
+    },
+  },
   plugins: [
     new CleanWebpackPlugin(),
-    new WorkboxPlugin.GenerateSW({
-      // these options encourage the ServiceWorkers to get in there fast
-      // and not allow any straggling "old" SWs to hang around
-      skipWaiting: true,
-    }),
     new CopyPlugin( {
       patterns: [
         {
@@ -72,7 +74,7 @@ const webpackConfig = {
           to: '.',
         },
       ],
-    } ),
+    } )
   ],
   optimization: {
     usedExports: true,
@@ -82,8 +84,8 @@ const webpackConfig = {
     minimize: true,
     minimizer: [
       new TerserPlugin()
-    ]
-  }
+    ],
+  },
 }
 
 module.exports = webpackConfig
