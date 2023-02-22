@@ -1,0 +1,11 @@
+{
+  "name": "wasm",
+  "version": "1.0.0",
+  "dependencies": {
+    "libpng": "https://github.com/LuaDist/libpng.git"
+  },
+  "scripts": {
+    "compile": "docker run --rm -v $(pwd):/src emscripten/emsdk:latest emcc -Os -s WASM=1 -s EXPORTED_FUNCTIONS='[\"_decode_avif\"]' -I /dav1d/include -L /dav1d/lib -l/dav1d -o decode_avif.cpp -o decode_avif.js",
+    "compile-win": "docker run --rm -v \"%cd%\":/src emscripten/emsdk:latest emcc -Os -s WASM=1 -s EXPORTED_FUNCTIONS='[\"_decode_avif\"]' -I /dav1d/include -L /dav1d/lib -l /dav1d -o decode_avif.cpp -o decode_avif.js"
+  }
+}
