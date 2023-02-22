@@ -1,15 +1,21 @@
-// https://stackoverflow.com/questions/5573096/detecting-webp-support
-export async function detectAvifSupport(): Promise<boolean> {
 
+/**
+ * It creates an image element, sets its source to a base64 encoded AVIF image, and then returns true
+ * if the image loads successfully
+ * https://stackoverflow.com/questions/5573096/detecting-webp-support
+ *
+ * @returns A boolean value.
+ */
+export async function detectAvifSupport (): Promise<boolean> {
   const testImageSources = [
-    "data:image/avif;base64,AAAAHGZ0eXBtaWYxAAAAAG1pZjFhdmlmbWlhZgAAAPFtZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAAAA5waXRtAAAAAAABAAAAHmlsb2MAAAAABEAAAQABAAAAAAEVAAEAAAAfAAAAKGlpbmYAAAAAAAEAAAAaaW5mZQIAAAAAAQAAYXYwMUltYWdlAAAAAHBpcHJwAAAAUWlwY28AAAAUaXNwZQAAAAAAAAABAAAAAQAAABBwYXNwAAAAAQAAAAEAAAAVYXYxQ4EgAAAKBzgABpAQ0AIAAAAQcGl4aQAAAAADCAgIAAAAF2lwbWEAAAAAAAAAAQABBAECg4QAAAAnbWRhdAoHOAAGkBDQAjIUFkAAAEgAAAwGbmVx8APS84zVsoA="
+    'data:image/avif;base64,AAAAHGZ0eXBtaWYxAAAAAG1pZjFhdmlmbWlhZgAAAPFtZXRhAAAAAAAAACFoZGxyAAAAAAAAAABwaWN0AAAAAAAAAAAAAAAAAAAAAA5waXRtAAAAAAABAAAAHmlsb2MAAAAABEAAAQABAAAAAAEVAAEAAAAfAAAAKGlpbmYAAAAAAAEAAAAaaW5mZQIAAAAAAQAAYXYwMUltYWdlAAAAAHBpcHJwAAAAUWlwY28AAAAUaXNwZQAAAAAAAAABAAAAAQAAABBwYXNwAAAAAQAAAAEAAAAVYXYxQ4EgAAAKBzgABpAQ0AIAAAAQcGl4aQAAAAADCAgIAAAAF2lwbWEAAAAAAAAAAQABBAECg4QAAAAnbWRhdAoHOAAGkBDQAjIUFkAAAEgAAAwGbmVx8APS84zVsoA='
   ]
 
-  const testImage = (src: string): Promise<boolean> => {
-    return new Promise(resolve => {
-      var img = document.createElement("img")
-      img.onerror = () => resolve(false)
-      img.onload = () => resolve(true)
+  const testImage = async (src: string): Promise<boolean> => {
+    return await new Promise(resolve => {
+      const img = document.createElement('img')
+      img.onerror = () => { resolve(false) }
+      img.onload = () => { resolve(true) }
       img.src = src
     })
   }
@@ -18,8 +24,6 @@ export async function detectAvifSupport(): Promise<boolean> {
 
   return results.every(result => !!result)
 }
-
-
 
 /**
  * "If the browser can play a video with the codec av01.0.05M.08, then it supports AV1."
@@ -30,7 +34,7 @@ export async function detectAvifSupport(): Promise<boolean> {
  *
  * @returns A boolean value.
  */
-export function hasAv1Support(): boolean {
-  const vid = document.createElement("video");
-  return vid.canPlayType('video/mp4; codecs="av01.0.05M.08"') === "probably";
+export function hasAv1Support (): boolean {
+  const vid = document.createElement('video')
+  return vid.canPlayType('video/mp4; codecs="av01.0.05M.08"') === 'probably'
 }

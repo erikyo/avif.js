@@ -6,8 +6,8 @@
   <script src="dist/avif-polyfill.js"></script>
   <script>
     avifPolyfill.swInit( {
-      swUrl: "./sw.js",
-      wasmUrl: new URL("./dist/dav1d.wasm", document.baseURI).href,
+      swURL: "avif-sw.js",
+      wasmURL: new URL("./dist/dav1d.wasm", document.baseURI).href,
       cache: true
     } )
   </script>
@@ -53,26 +53,20 @@
       background-color: #ddd;
       padding: 3px;
     }
-    .user-img {
-      max-width: 100%;
-    }
-    .mexico-img {
-      width: 600px;
-    }
     .irvine-img {
-      width: 480px;
-      height: 640px;
       background-size: contain;
     }
-    .ronda {
-      width: 540px;
-    }
     .ronda-img {
-      height: 540px;
       transform: rotate(45deg);
       transform-origin: right bottom;
       background-position: center;
       margin: 210px -210px;
+    }
+    .image-grid {
+      display: grid;
+      gap: 50px;
+      padding: 50px;
+      grid-template-columns: 1fr 1fr 1fr;
     }
   </style>
 </head>
@@ -85,7 +79,7 @@
   <div class="item user hidden" id="custom-item"></div>
   <input class="hidden" id="file-input" type="file" accept=".avif">
 
-  <div class="image-grid"">
+  <div class="image-grid">
     <div class="item mexico">
       <div class="caption">&lt;img&gt;</div>
       <img class="mexico-img" src="Mexico.avif">
@@ -101,6 +95,11 @@
       <img class="mexico-img" src="pokerface.png">
     </div>
 
+    <div class="item irvine">
+      <div class="caption">background-image: url()</div>
+      <div class="irvine-img" style="background-color: #333; background-image: url(railgun.avif)"></div>
+    </div>
+
     <div class="item mexico">
       <div class="caption">&lt;img&gt;</div>
       <img class="mexico-img" src="animated.avif">
@@ -109,11 +108,6 @@
     <div class="item mexico">
       <div class="caption">&lt;img&gt;</div>
       <img class="mexico-img" src="Chimera-AV1-10bit-1920x1080-6191kbps-50.avif">
-    </div>
-
-    <div class="item irvine">
-      <div class="caption">background-image: url()</div>
-      <div class="irvine-img" style="background-color: #333; background-image: url(railgun.avif)"></div>
     </div>
 
     <div class="item ronda">

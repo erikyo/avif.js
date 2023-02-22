@@ -18,8 +18,95 @@ const MOV_MDAT_OFFSET = 608
 const MOV_TKHD_WIDTH_OFFSET = 234
 const MOV_AV01_WIDTH_OFFSET = 437
 
+/**
+ * It throws an error if the first argument is false
+ * @param cond - The condition to check.
+ * @param str - The string to be parsed.
+ */
 function assert (cond, str) {
   if (!cond) throw new Error(str)
+}
+
+function findMoovOffset (dataView) {
+  const length = dataView.byteLength
+
+  let offset = 0
+
+  while (offset < length) {
+    const size = dataView.getUint32(offset, false)
+    const type = dataView.getInt32(offset + 4, false)
+
+    if (type === 0x6D6F6F76) {
+      // found the moov atom
+      return offset
+    }
+
+    // move to the next atom
+    offset += size
+  }
+
+  // moov atom not found
+  return null
+}
+
+function findAtomOffset (dataView, parentOffset, atomType) {
+  const parentSize = dataView.getUint32(parentOffset, false)
+
+  let offset = parentOffset + 8
+
+  while (offset < parentOffset + parentSize) {
+    const size = dataView.getUint32(offset, false)
+    const type = dataView.getInt32(offset + 4, false)
+
+    if (type === atomType) {
+      // found the atom
+      return offset
+    }
+    offset += size
+  }
+}
+
+function getMovHeaderData (source) {
+  // Create a new DataView object from your source data
+  const dataView = new DataView(source);
+
+  // Find the offset of the moov atom
+  const moovOffset = findMoovOffset(dataView);
+
+  // Find the offset of the mvhd atom
+  const mvhdOffset = findAtomOffset(dataView, moovOffset, 'mvhd');
+
+  // Find the offset of the trak atom
+  const trakOffset = findAtomOffset(dataView, moovOffset, 'trak');
+
+  // Find the offset of the tkhd atom
+  const tkhdOffset = findAtomOffset(dataView, trakOffset, 'tkhd');
+
+  // Find the offset of the mdia atom
+  const mdiaOffset = findAtomOffset(dataView, trakOffset, 'mdia');
+
+  // Find the offset of the mdhd atom
+  const mdhdOffset = findAtomOffset(dataView, mdiaOffset, 'mdhd');
+
+  // Find the offset of the stbl atom
+  const stblOffset = findAtomOffset(dataView, mdiaOffset, 'stbl');
+
+  // Find the offset of the stsz atom
+  const stszOffset = findAtomOffset(dataView, stblOffset, 'stsz');
+
+  // Get the timescale and duration from the mvhd atom
+  const timescale = dataView.getUint32(mvhdOffset + 12, false);
+  const duration = dataView.getUint32(mvhdOffset + 16, false);
+
+  // Get the width and height from the tkhd atom
+  const width = dataView.getUint16(tkhdOffset + 76, false);
+  const height = dataView.getUint16(tkhdOffset + 78, false);
+
+  // Get the number of frames from the mdhd atom
+  const frameCount = dataView.getUint32(mdhdOffset + 16, false) / timescale;
+
+  // Get the bit depth from the stsz atom
+  const bitDepth = dataView.getUint16(stszOffset + 24, false);
 }
 
 /**

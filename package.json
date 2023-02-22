@@ -6,7 +6,7 @@
   "types": "dist/types/",
   "scripts": {
     "watch": "webpack --watch",
-    "serve": "webpack serve --https --stats-error-details",
+    "serve": "http-server ./docs",
     "build:js": "webpack --mode=production",
     "build:types": "tsc --project tsconfig.types.json",
     "build": "npm run build:js && npm run build:types"
