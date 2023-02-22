@@ -1,5 +1,5 @@
 #include "emscripten.h"
-#include "dav1d/src/encode.h"
+#include "src/dav1d/src/decode.c"
 
 EMSCRIPTEN_KEEPALIVE
 void decode_avif(unsigned char* input_data, int input_size, unsigned char* output_data, int output_size) {
